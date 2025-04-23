@@ -19,7 +19,9 @@
   },
   "homepage": "https://github.com/nortonrd3/se_project_express#readme",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "mongoose": "^8.13.2",
+    "validator": "^13.15.0"
   },
   "devDependencies": {
     "eslint": "^8.57.1",
