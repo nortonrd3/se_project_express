@@ -1,4 +1,4 @@
-const User = require("../models/User.js");
+const User = require("../models/User");
 const {
   BAD_REQUEST,
   NOT_FOUND,
@@ -24,11 +24,7 @@ const getUsers = (req, res) => {
 const createUser = (req, res) => {
   const { name, avatar } = req.body;
   User.create({ name, avatar })
-    .then((user) =>
-      res
-        .status(CREATED)
-        .send(user)
-    )
+    .then((user) => res.status(CREATED).send(user))
     .catch((err) => {
       console.error(err);
       if (err.name === "ValidationError") {

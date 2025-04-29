@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const ClothingItem = require("../models/ClothingItem.js");
+const ClothingItem = require("../models/ClothingItem");
 const {
   BAD_REQUEST,
   NOT_FOUND,
