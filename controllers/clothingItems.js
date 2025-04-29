@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const ClothingItem = require("../models/clothingItem");
 const {
   BAD_REQUEST,
@@ -88,6 +89,14 @@ const updateItem = (req, res) => {
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
+
+  // Check if _id is valid
+  if (!mongoose.Types.ObjectId.isValid(itemId)) {
+    return res.status(BAD_REQUEST).send({
+      message: "Invalid item ID format",
+    });
+  }
+
   ClothingItem.findByIdAndDelete(itemId)
     .orFail()
     .then((item) => {
@@ -95,11 +104,6 @@ const deleteItem = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      if (err.name === "ValidationError") {
-        return res.status(BAD_REQUEST).send({
-          message: err.message,
-        });
-      }
       if (err.name === "DocumentNotFoundError") {
         return res.status(NOT_FOUND).send({
           message: "Requested resource not found",
@@ -114,6 +118,12 @@ const deleteItem = (req, res) => {
 // Adding a like to a clothing item
 
 const likeItem = (req, res) => {
+  // Check if _id is valid
+  if (!mongoose.Types.ObjectId.isValid(req.params.itemId)) {
+    return res.status(BAD_REQUEST).send({
+      message: "Invalid item ID format",
+    });
+  }
   ClothingItem.findByIdAndUpdate(
     req.params.itemId,
     { $addToSet: { likes: req.user._id } },
@@ -125,11 +135,6 @@ const likeItem = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      if (err.name === "ValidationError") {
-        return res.status(BAD_REQUEST).send({
-          message: err.message,
-        });
-      }
       if (err.name === "DocumentNotFoundError") {
         return res.status(NOT_FOUND).send({
           message: "Requested resource not found",
@@ -143,6 +148,12 @@ const likeItem = (req, res) => {
 
 // Removing a like from a clothing item
 const dislikeItem = (req, res) => {
+  // Check if _id is valid
+  if (!mongoose.Types.ObjectId.isValid(req.params.itemId)) {
+    return res.status(BAD_REQUEST).send({
+      message: "Invalid item ID format",
+    });
+  }
   ClothingItem.findByIdAndUpdate(
     req.params.itemId,
     { $pull: { likes: req.user._id } },
@@ -154,7 +165,7 @@ const dislikeItem = (req, res) => {
     })
     .catch((err) => {
       console.error(err);
-      if (err.name === "ValidationError") {
+      if (err.name === "AssertionError") {
         return res.status(BAD_REQUEST).send({
           message: err.message,
         });
