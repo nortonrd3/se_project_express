@@ -9,5 +9,5 @@ module.exports = {
   NOT_FOUND,
   INTERNAL_SERVER_ERROR,
   OK,
-  CREATED
+  CREATED,
 };
