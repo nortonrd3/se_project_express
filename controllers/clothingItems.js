@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const ClothingItem = require("../models/clothingItem");
+const ClothingItem = require("../models/ClothingItem");
 const {
   BAD_REQUEST,
   NOT_FOUND,
@@ -97,7 +97,7 @@ const deleteItem = (req, res) => {
     });
   }
 
-  ClothingItem.findByIdAndDelete(itemId)
+  return ClothingItem.findByIdAndDelete(itemId)
     .orFail()
     .then((item) => {
       res.status(OK).send({ data: item });
@@ -124,7 +124,7 @@ const likeItem = (req, res) => {
       message: "Invalid item ID format",
     });
   }
-  ClothingItem.findByIdAndUpdate(
+  return ClothingItem.findByIdAndUpdate(
     req.params.itemId,
     { $addToSet: { likes: req.user._id } },
     { new: true }
@@ -154,7 +154,7 @@ const dislikeItem = (req, res) => {
       message: "Invalid item ID format",
     });
   }
-  ClothingItem.findByIdAndUpdate(
+  return ClothingItem.findByIdAndUpdate(
     req.params.itemId,
     { $pull: { likes: req.user._id } },
     { new: true }
