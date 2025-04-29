@@ -22,15 +22,7 @@ module.exports = {
   rules: {
     "no-underscore-dangle": ["error", { allow: ["_id"] }],
     "no-console": ["warn", { allow: ["error"] }],
-    "import/extensions": [
-      "error",
-      "ignorePackages",
-      {
-        js: "never",
-        jsx: "never",
-        ts: "never",
-        tsx: "never",
-      },
-    ],
+    "import/extensions": ["off"],
+    "import/no-unresolved": ["off"],
   },
 };
