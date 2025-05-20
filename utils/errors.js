@@ -3,6 +3,10 @@ const NOT_FOUND = 404;
 const INTERNAL_SERVER_ERROR = 500;
 const OK = 200;
 const CREATED = 201;
+const CONFLICT = 409;
+const MONGO_DUPLICATE_KEY_ERROR = 11000;
+const UNAUTHORIZED = 401;
+const FORBIDDEN = 403;
 
 module.exports = {
   BAD_REQUEST,
@@ -10,4 +14,8 @@ module.exports = {
   INTERNAL_SERVER_ERROR,
   OK,
   CREATED,
+  CONFLICT,
+  MONGO_DUPLICATE_KEY_ERROR,
+  UNAUTHORIZED,
+  FORBIDDEN,
 };

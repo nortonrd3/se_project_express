@@ -6,6 +6,7 @@ const {
   INTERNAL_SERVER_ERROR,
   OK,
   CREATED,
+  FORBIDDEN,
 } = require("../utils/errors");
 
 // Create a clothing item
@@ -14,8 +15,15 @@ const createItem = (req, res) => {
 
   const { name, weather, imageUrl } = req.body;
 
-  ClothingItem.create({ name, weather, imageUrl, owner })
+  if (!name || !weather || !imageUrl) {
+    return res.status(BAD_REQUEST).send({
+      message: "Name, weather, and imageUrl are required",
+    });
+  }
+
+  return ClothingItem.create({ name, weather, imageUrl, owner })
     .then((item) => {
+      // eslint-disable-next-line no-console
       console.log(item);
       res.status(CREATED).send({ data: item });
     })
@@ -84,28 +92,44 @@ const getItems = (req, res) => {
 
 const deleteItem = (req, res) => {
   const { itemId } = req.params;
+  const userId = req.user._id;
 
-  // Check if _id is valid
-  if (!mongoose.Types.ObjectId.isValid(itemId)) {
-    return res.status(BAD_REQUEST).send({
-      message: "Invalid item ID format",
-    });
-  }
-
-  return ClothingItem.findByIdAndDelete(itemId)
-    .orFail()
+  return ClothingItem.findById(itemId)
     .then((item) => {
-      res.status(OK).send({ data: item });
+      if (!item) {
+        res.status(NOT_FOUND).send({ message: "Item not found" });
+        return Promise.reject(new Error("Item not found"));
+      }
+
+      if (!item.owner.equals(userId)) {
+        res.status(FORBIDDEN).send({
+          message: "You don't have permission to delete this item",
+        });
+        return Promise.reject(new Error("Forbidden"));
+      }
+
+      return item.deleteOne();
+    })
+    .then((result) => {
+      // Only send response if deleteOne was called
+      if (result) {
+        return res.send({ message: "Item deleted" });
+      }
+      return undefined;
     })
     .catch((err) => {
-      console.error(err);
-      if (err.name === "DocumentNotFoundError") {
-        return res.status(NOT_FOUND).send({
-          message: "Requested resource not found",
+      if (err.message === "Item not found" || err.message === "Forbidden") {
+        // Response already sent, do nothing
+        return undefined;
+      }
+      if (err.name === "CastError") {
+        return res.status(BAD_REQUEST).send({
+          message: "Invalid item ID format",
         });
       }
+      console.error(err);
       return res.status(INTERNAL_SERVER_ERROR).send({
-        message: "An error has occurred on the server while deleting the item",
+        message: "An error occurred on the server while deleting the item",
       });
     });
 };
