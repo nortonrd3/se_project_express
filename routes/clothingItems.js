@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const auth = require("../middlewares/auth");
 const {
   createItem,
   getItems,
@@ -7,17 +8,17 @@ const {
   dislikeItem,
 } = require("../controllers/clothingItems");
 
-// Create a clothing item
-
-router.post("/", createItem);
-
-// Read all clothing items
+// Get all clothing items
 
 router.get("/", getItems);
 
-// Update a clothing item
+// Middleware to check authentication -- all routes below this line require authentication
+router.use(auth);
 
-// router.put("/:itemId", updateItem);
+
+// Create a clothing item
+
+router.post("/", createItem);
 
 // Delete a clothing item
 

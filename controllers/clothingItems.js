@@ -55,38 +55,6 @@ const getItems = (req, res) => {
     });
 };
 
-// Update a clothing item
-
-// const updateItem = (req, res) => {
-//   const { itemId } = req.params;
-//   const { name, weather, imageUrl } = req.body;
-
-//   ClothingItem.findByIdAndUpdate(
-//     itemId,
-//     { $set: { name, weather, imageUrl } },
-//     { new: true }
-//   )
-//     .orFail()
-//     .then((item) => {
-//       res.status(OK).send({ data: item });
-//     })
-//     .catch((err) => {
-//       console.error(err);
-//       if (err.name === "ValidationError") {
-//         return res.status(BAD_REQUEST).send({
-//           message: err.message,
-//         });
-//       }
-//       if (err.name === "DocumentNotFoundError") {
-//         return res.status(NOT_FOUND).send({
-//           message: "Requested resource not found",
-//         });
-//       }
-//       return res.status(INTERNAL_SERVER_ERROR).send({
-//         message: "An error has occurred on the server while updating the item",
-//       });
-//     });
-// };
 
 // Delete a clothing item
 

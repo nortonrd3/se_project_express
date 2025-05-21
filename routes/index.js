@@ -1,11 +1,10 @@
 const router = require("express").Router();
 const clothingItemsRouter = require("./clothingItems");
+const userRouter = require("./users");
 const { NOT_FOUND } = require("../utils/errors");
 const {
   login,
   createUser,
-  getCurrentUser,
-  updateUser,
 } = require("../controllers/users");
 const auth = require("../middlewares/auth");
 
@@ -13,15 +12,15 @@ const auth = require("../middlewares/auth");
 router.post("/signup", createUser);
 router.post("/signin", login);
 
+router.use("/items", clothingItemsRouter);
+
 
 // Authentication middleware
 router.use(auth);
 
 // All routes below this line require authentication
 
-router.get("/users/me", getCurrentUser);
-router.patch("/users/me", updateUser);
-router.use("/items", clothingItemsRouter);
+router.use("/", userRouter);
 router.use((req, res) => {
   res.status(NOT_FOUND).send({ message: "Requested resource not found" });
 });
