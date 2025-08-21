@@ -23,8 +23,6 @@ const createItem = (req, res) => {
 
   return ClothingItem.create({ name, weather, imageUrl, owner })
     .then((item) => {
-      // eslint-disable-next-line no-console
-      console.log(item);
       res.status(CREATED).send({ data: item });
     })
     .catch((err) => {

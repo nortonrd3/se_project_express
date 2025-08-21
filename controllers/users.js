@@ -17,14 +17,16 @@ const {
 // This route is used to create a new user
 const createUser = (req, res) => {
   const { name, avatar, email, password } = req.body;
-  if (!name || !avatar || !email || !password) {
+  if (!name || !email || !password) {
     return res.status(BAD_REQUEST).send({
       message: "All fields are required",
     });
   }
   return bcrypt
     .hash(password, 10)
-    .then((hash) => User.create({ name, avatar, email, password: hash }))
+    .then((hash) =>
+      User.create({ name, avatar: avatar || undefined, email, password: hash })
+    )
     .then((user) => {
       const userObj = user.toObject();
       delete userObj.password;
@@ -57,7 +59,7 @@ const getCurrentUser = (req, res) => {
     .then((user) => {
       const userObj = user.toObject();
       delete userObj.password;
-      return res.status(OK).send(userObj);
+      return res.status(OK).send({ data: userObj });
     })
     .catch((err) => {
       console.error(err);
@@ -139,7 +141,7 @@ const updateUser = (req, res) => {
     .then((user) => {
       const userObj = user.toObject();
       delete userObj.password;
-      return res.status(OK).send(userObj);
+      return res.status(OK).send({ data: userObj });
     })
     .catch((err) => {
       console.error(err);
