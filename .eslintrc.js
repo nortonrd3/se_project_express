@@ -24,5 +24,6 @@ module.exports = {
     "no-console": ["warn", { allow: ["error"] }],
     "import/extensions": ["off"],
     "import/no-unresolved": ["off"],
+    "no-unused-vars": ["error", { argsIgnorePattern: "next" }],
   },
 };
