@@ -2,6 +2,7 @@ const router = require("express").Router();
 const clothingItemsRouter = require("./clothingItems");
 const userRouter = require("./users");
 const { NOT_FOUND } = require("../utils/errors");
+const { validateUserCreation, validateUserLogin } = require("../middlewares/validation");
 const {
   login,
   createUser,
@@ -9,8 +10,8 @@ const {
 const auth = require("../middlewares/auth");
 
 // Public routes
-router.post("/signup", createUser);
-router.post("/signin", login);
+router.post("/signup", validateUserCreation, createUser);
+router.post("/signin", validateUserLogin, login);
 
 router.use("/items", clothingItemsRouter);
 
