@@ -2,6 +2,12 @@
 
 The back-end project is focused on creating a server for the WTWR application. The server provides an API for managing users and their data, including user creation, retrieval, and validation. The project also includes user authorization and error handling to ensure secure and reliable functionality.
 
+## Deployed Project
+
+**Domain:** https://wtwrapp.csproject.org
+
+**Frontend Repository:** https://github.com/nortonrd3/se_project_react
+
 ## Project Functionality
 
 - RESTful API for managing users.
